@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+venv/
+.venv/
+__pycache__/
+*.pyc
+
+# Environment & Credentials
+.env
+*.env
+
+# Build & Output directories
+dist/
+build/
+*.log
+
+.idea/
+*.swp
+*.ds_store
+
+# Database & Temporary Uploads (auto-generated on startup)
+*.db
+backend/videos.db
+
+TECHNICAL_EXPLANATION.md
