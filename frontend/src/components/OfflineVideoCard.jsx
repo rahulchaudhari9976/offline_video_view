@@ -7,44 +7,44 @@ export default function OfflineVideoCard({ video, onPlay, onDelete }) {
   const thumbSrc = video.thumbnailDataUrl || video.thumbnail || DEFAULT_SVG_THUMB;
 
   return (
-    <div className="group bg-white dark:bg-slate-900 rounded-2xl overflow-hidden border border-slate-200/80 dark:border-slate-800/80 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+    <div className="bg-white dark:bg-slate-900 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between transition-shadow hover:shadow-md">
       <div>
         {/* Video Thumbnail */}
         <div 
-          className="relative aspect-video bg-slate-950 overflow-hidden cursor-pointer touch-manipulation" 
+          className="relative aspect-video bg-slate-950 overflow-hidden cursor-pointer group" 
           onClick={() => onPlay(video)}
         >
           <img 
             src={thumbSrc} 
             alt={video.title} 
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300"
             onError={(e) => {
               e.target.src = DEFAULT_SVG_THUMB;
             }}
           />
-          <div className="absolute bottom-2.5 right-2.5 px-2.5 py-1 rounded-lg bg-slate-950/80 text-white text-[11px] font-semibold backdrop-blur-md border border-white/10">
-            {video.duration || '10:00'}
+          <div className="absolute bottom-2 right-2 px-2 py-0.5 rounded bg-black/75 text-white text-xs font-medium">
+            {video.duration || '00:10'}
           </div>
-          <div className="absolute inset-0 flex items-center justify-center opacity-90 sm:opacity-0 group-hover:opacity-100 transition-opacity bg-slate-950/30">
-            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-emerald-600 text-white flex items-center justify-center shadow-lg transform scale-95 sm:scale-75 group-hover:scale-100 transition-transform">
-              <Play className="w-6 h-6 sm:w-7 sm:h-7 fill-current ml-0.5" />
+          <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="w-12 h-12 rounded-full bg-emerald-600 text-white flex items-center justify-center shadow-md">
+              <Play className="w-6 h-6 fill-current ml-0.5" />
             </div>
           </div>
         </div>
 
         {/* Info */}
-        <div className="p-4 sm:p-5">
-          <div className="flex items-center space-x-2 text-[11px] font-bold text-emerald-600 dark:text-emerald-400 mb-1.5 uppercase tracking-wider">
+        <div className="p-4">
+          <div className="flex items-center space-x-1.5 text-xs font-medium text-emerald-600 dark:text-emerald-400 mb-1">
             <WifiOff className="w-3.5 h-3.5" />
-            <span>Available Offline</span>
+            <span>Saved Offline</span>
           </div>
-          <h3 className="font-bold text-base sm:text-lg line-clamp-1 text-slate-900 dark:text-slate-100">
+          <h3 className="font-semibold text-base text-slate-900 dark:text-white line-clamp-1">
             {video.title}
           </h3>
           <div className="mt-2 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
             <span>Saved: {new Date(video.downloadDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</span>
-            <span className="flex items-center space-x-1 text-[11px] font-medium text-indigo-600 dark:text-indigo-400">
-              <HardDrive className="w-3 h-3" />
+            <span className="flex items-center space-x-1 text-slate-400">
+              <HardDrive className="w-3.5 h-3.5" />
               <span>IndexedDB</span>
             </span>
           </div>
@@ -52,24 +52,23 @@ export default function OfflineVideoCard({ video, onPlay, onDelete }) {
       </div>
 
       {/* Buttons */}
-      <div className="p-4 sm:p-5 pt-0 grid grid-cols-2 gap-2.5 sm:gap-3">
+      <div className="p-4 pt-0 grid grid-cols-2 gap-2">
         <button
           onClick={() => onPlay(video)}
-          className="flex items-center justify-center space-x-2 min-h-[42px] px-3 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs sm:text-sm shadow-md shadow-emerald-600/20 transition-colors cursor-pointer active:scale-95"
+          className="flex items-center justify-center space-x-1.5 py-2 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-xs transition-colors cursor-pointer"
         >
-          <Play className="w-4 h-4 fill-current" />
+          <Play className="w-3.5 h-3.5 fill-current" />
           <span>Play Offline</span>
         </button>
 
         <button
           onClick={() => onDelete(video.id)}
-          className="flex items-center justify-center space-x-1.5 min-h-[42px] px-3 py-2.5 rounded-xl border border-rose-200 dark:border-rose-900/60 text-rose-600 dark:text-rose-400 font-semibold text-xs sm:text-sm hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors cursor-pointer active:scale-95"
+          className="flex items-center justify-center space-x-1.5 py-2 px-3 rounded-lg border border-rose-200 dark:border-rose-900/60 text-rose-600 dark:text-rose-400 font-medium text-xs hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors cursor-pointer"
         >
-          <Trash2 className="w-4 h-4" />
+          <Trash2 className="w-3.5 h-3.5" />
           <span>Delete</span>
         </button>
       </div>
     </div>
   );
 }
-
