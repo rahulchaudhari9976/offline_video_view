@@ -70,18 +70,6 @@ def seed_database(force_redownload=True):
         db.query(Video).delete()
         db.commit()
         
-        # Ensure tech MP4 videos exist
-        from app.generate_tech_videos import generate_all_videos
-        need_gen = False
-        for item in sample_videos:
-            video_path = os.path.join(videos_dir, item["filename"])
-            if force_redownload or not os.path.exists(video_path) or os.path.getsize(video_path) < 10000:
-                need_gen = True
-                break
-        if need_gen:
-            print("Generating matching technical MP4 video lessons...")
-            generate_all_videos()
-        
         for item in sample_videos:
             video_path = os.path.join(videos_dir, item["filename"])
             actual_size = f"{(os.path.getsize(video_path) / (1024 * 1024)):.1f} MB" if os.path.exists(video_path) else item["size"]

@@ -39,7 +39,7 @@ export default function App() {
     const handleOffline = () => {
       setIsOnline(false);
       setActiveTab('offline');
-      showToast('You are offline. Showing Offline Library!', 'error');
+      showToast('You are offline.', 'error');
     };
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
@@ -352,7 +352,7 @@ export default function App() {
       )}
 
       <footer className="border-t border-slate-200/80 dark:border-slate-800/80 py-5 text-center text-[11px] sm:text-xs text-slate-500">
-        Offline Learning Hub &copy; 2026 &bull;
+        Offline Learning Hub &copy; 2026
       </footer>
     </div>
   );
