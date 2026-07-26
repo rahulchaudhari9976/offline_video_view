@@ -24,7 +24,7 @@ export default function Navbar({ activeTab, setActiveTab, isOnline, downloadedCo
             </div>
             <div className="flex flex-col">
               <span className="font-bold text-lg text-slate-900 dark:text-white tracking-tight">
-                Video Learning Hub
+                Offline Learning Hub
               </span>
             </div>
           </div>
@@ -33,11 +33,10 @@ export default function Navbar({ activeTab, setActiveTab, isOnline, downloadedCo
           <nav className="hidden md:flex items-center space-x-1 bg-slate-100 dark:bg-slate-800/80 p-1 rounded-xl">
             <button
               onClick={() => handleTabClick('home')}
-              className={`flex items-center space-x-2 px-3.5 py-1.5 rounded-lg font-medium text-xs sm:text-sm transition-colors cursor-pointer ${
-                activeTab === 'home'
-                  ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-sm'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-              }`}
+              className={`flex items-center space-x-2 px-3.5 py-1.5 rounded-lg font-medium text-xs sm:text-sm transition-colors cursor-pointer ${activeTab === 'home'
+                ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-sm'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                }`}
             >
               <Globe className="w-4 h-4" />
               <span>Online Catalog</span>
@@ -45,11 +44,10 @@ export default function Navbar({ activeTab, setActiveTab, isOnline, downloadedCo
 
             <button
               onClick={() => handleTabClick('offline')}
-              className={`flex items-center space-x-2 px-3.5 py-1.5 rounded-lg font-medium text-xs sm:text-sm transition-colors cursor-pointer ${
-                activeTab === 'offline'
-                  ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-sm'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-              }`}
+              className={`flex items-center space-x-2 px-3.5 py-1.5 rounded-lg font-medium text-xs sm:text-sm transition-colors cursor-pointer ${activeTab === 'offline'
+                ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-sm'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                }`}
             >
               <HardDriveDownload className="w-4 h-4" />
               <span>Offline Library</span>
@@ -64,11 +62,10 @@ export default function Navbar({ activeTab, setActiveTab, isOnline, downloadedCo
           {/* Right Header Actions */}
           <div className="flex items-center space-x-3">
             {/* Network Status Badge */}
-            <div className={`flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs font-medium border ${
-              isOnline
-                ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800'
-                : 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800'
-            }`}>
+            <div className={`flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs font-medium border ${isOnline
+              ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800'
+              : 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800'
+              }`}>
               <span className={`w-2 h-2 rounded-full ${isOnline ? 'bg-emerald-500' : 'bg-amber-500 animate-ping'}`} />
               {isOnline ? <Wifi className="w-3.5 h-3.5" /> : <WifiOff className="w-3.5 h-3.5" />}
               <span>{isOnline ? 'Online' : 'Offline'}</span>
@@ -92,22 +89,20 @@ export default function Navbar({ activeTab, setActiveTab, isOnline, downloadedCo
             <div className="flex flex-col space-y-1">
               <button
                 onClick={() => handleTabClick('home')}
-                className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium ${
-                  activeTab === 'home'
-                    ? 'bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400'
-                    : 'text-slate-700 dark:text-slate-300'
-                }`}
+                className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium ${activeTab === 'home'
+                  ? 'bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400'
+                  : 'text-slate-700 dark:text-slate-300'
+                  }`}
               >
                 <Globe className="w-4 h-4" />
                 <span>Online Catalog</span>
               </button>
               <button
                 onClick={() => handleTabClick('offline')}
-                className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium ${
-                  activeTab === 'offline'
-                    ? 'bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400'
-                    : 'text-slate-700 dark:text-slate-300'
-                }`}
+                className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium ${activeTab === 'offline'
+                  ? 'bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400'
+                  : 'text-slate-700 dark:text-slate-300'
+                  }`}
               >
                 <div className="flex items-center space-x-3">
                   <HardDriveDownload className="w-4 h-4" />
