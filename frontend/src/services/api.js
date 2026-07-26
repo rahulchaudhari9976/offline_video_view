@@ -1,10 +1,11 @@
 import axios from 'axios';
 
 // API Base URL from environment variable, falling back to local backend port
-export const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000').replace(/\/$/, '');
+export const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000').trim().replace(/\/+$/, '');
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
+  timeout: 45000, // 45s timeout for cloud cold starts (e.g. Render free tier)
 });
 
 /**

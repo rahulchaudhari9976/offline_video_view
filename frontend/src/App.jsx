@@ -6,7 +6,7 @@ import OfflineVideoCard from './components/OfflineVideoCard';
 import VideoPlayerModal from './components/VideoPlayerModal';
 import { getAllOfflineVideos, saveOfflineVideo, deleteOfflineVideo } from './services/db';
 import { getVideos, getVideoDownloadUrl, formatAssetUrl } from './services/api';
-import { Search, VideoOff, DownloadCloud, AlertCircle, CheckCircle } from 'lucide-react';
+import { Search, VideoOff, DownloadCloud, AlertCircle, CheckCircle, RefreshCw } from 'lucide-react';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('home');
@@ -15,6 +15,7 @@ export default function App() {
   const [videos, setVideos] = useState([]);
   const [offlineVideos, setOfflineVideos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeVideo, setActiveVideo] = useState(null);
   const [isPlayingOffline, setIsPlayingOffline] = useState(false);
@@ -63,11 +64,13 @@ export default function App() {
 
   const fetchVideos = async () => {
     setLoading(true);
+    setFetchError(false);
     try {
       const res = await getVideos(searchQuery);
       setVideos(res.data);
     } catch (err) {
       console.error("Error fetching online videos:", err);
+      setFetchError(true);
       if (navigator.onLine) {
         showToast("Failed to fetch videos from backend server.", "error");
       }
@@ -221,8 +224,21 @@ export default function App() {
                 <div className="w-16 h-16 mx-auto rounded-full bg-indigo-50 dark:bg-indigo-950 flex items-center justify-center text-indigo-600 mb-4">
                   <VideoOff className="w-8 h-8" />
                 </div>
-                <h3 className="font-bold text-lg">No videos found</h3>
-                <p className="text-slate-500 text-sm mt-1">Try adjusting your search query or check backend connection.</p>
+                <h3 className="font-bold text-lg">{fetchError ? "Failed to connect to backend" : "No videos found"}</h3>
+                <p className="text-slate-500 text-sm mt-1 max-w-md mx-auto">
+                  {fetchError 
+                    ? "Could not fetch videos from backend server. If your backend is hosted on a free platform like Render, it may take 30-50 seconds to wake up." 
+                    : "Try adjusting your search query."}
+                </p>
+                {fetchError && (
+                  <button 
+                    onClick={fetchVideos}
+                    className="mt-6 px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-sm inline-flex items-center gap-2 shadow-md transition-all cursor-pointer"
+                  >
+                    <RefreshCw className="w-4 h-4" />
+                    Retry Connection
+                  </button>
+                )}
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
