@@ -23,7 +23,12 @@ origins = [origin.strip() for origin in allowed_origins_env.split(",")] if allow
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=[
+        "http://localhost:5173",
+        "http://localhost:3000",
+        "https://offline-video-view.vercel.app",
+        "https://offline-video-api.onrender.com",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
