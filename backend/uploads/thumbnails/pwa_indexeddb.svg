@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360">
+  <defs>
+    <linearGradient id="bg3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2e1065"/>
+      <stop offset="50%" stop-color="#581c87"/>
+      <stop offset="100%" stop-color="#86198f"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="360" fill="url(#bg3)"/>
+  <circle cx="170" cy="160" r="130" fill="#c084fc" opacity="0.2"/>
+  <circle cx="490" cy="170" r="110" fill="#e879f9" opacity="0.15"/>
+  <g transform="translate(170, 150)">
+    <ellipse cx="0" cy="-35" rx="55" ry="18" fill="#a855f7" opacity="0.9"/>
+    <path d="M-55,-35 L-55,0 A55,18 0 0,0 55,0 L55,-35 Z" fill="#9333ea" opacity="0.8"/>
+    <ellipse cx="0" cy="0" rx="55" ry="18" fill="#c084fc" opacity="0.9"/>
+    <path d="M-55,0 L-55,35 A55,18 0 0,0 55,35 L55,0 Z" fill="#7e22ce" opacity="0.8"/>
+    <ellipse cx="0" cy="35" rx="55" ry="18" fill="#e879f9" opacity="0.9"/>
+  </g>
+  <rect x="360" y="80" width="220" height="140" rx="16" fill="rgba(46, 16, 101, 0.85)" stroke="rgba(216, 180, 254, 0.3)" stroke-width="1.5"/>
+  <rect x="380" y="105" width="180" height="34" rx="8" fill="rgba(168, 85, 247, 0.3)"/>
+  <text x="470" y="125" dominant-baseline="middle" text-anchor="middle" fill="#f5d0fe" font-family="sans-serif" font-size="12" font-weight="bold">100% OFFLINE READY</text>
+  <text x="380" y="165" fill="#e9d5ff" font-family="sans-serif" font-size="11">Service Worker Active</text>
+  <text x="380" y="185" fill="#e9d5ff" font-family="sans-serif" font-size="11">IndexedDB Storage</text>
+  <rect x="35" y="32" width="165" height="28" rx="14" fill="rgba(232, 121, 249, 0.2)" stroke="#e879f9" stroke-width="1"/>
+  <text x="117" y="49" dominant-baseline="middle" text-anchor="middle" fill="#f5d0fe" font-family="sans-serif" font-size="11" font-weight="800" letter-spacing="1.5">PWA • ZERO DATA</text>
+  <text x="35" y="275" fill="#ffffff" font-family="sans-serif" font-size="22" font-weight="900">Progressive Web Apps Strategy</text>
+  <text x="35" y="305" fill="#f5d0fe" font-family="sans-serif" font-size="13" font-weight="600">Service Workers • Cache Storage API • IndexedDB</text>
+</svg>
