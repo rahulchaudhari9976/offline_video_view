@@ -39,7 +39,7 @@ export default function Navbar({ activeTab, setActiveTab, isOnline, downloadedCo
                 }`}
             >
               <Globe className="w-4 h-4" />
-              <span>Online Catalog</span>
+              <span>Online Mode</span>
             </button>
 
             <button
@@ -50,7 +50,7 @@ export default function Navbar({ activeTab, setActiveTab, isOnline, downloadedCo
                 }`}
             >
               <HardDriveDownload className="w-4 h-4" />
-              <span>Offline Library</span>
+              <span>Offline Mode</span>
               {downloadedCount > 0 && (
                 <span className="ml-1 px-1.5 py-0.5 text-xs rounded-full bg-indigo-600 text-white font-semibold">
                   {downloadedCount}
@@ -95,7 +95,7 @@ export default function Navbar({ activeTab, setActiveTab, isOnline, downloadedCo
                   }`}
               >
                 <Globe className="w-4 h-4" />
-                <span>Online Catalog</span>
+                <span>Online Mode</span>
               </button>
               <button
                 onClick={() => handleTabClick('offline')}
@@ -106,7 +106,7 @@ export default function Navbar({ activeTab, setActiveTab, isOnline, downloadedCo
               >
                 <div className="flex items-center space-x-3">
                   <HardDriveDownload className="w-4 h-4" />
-                  <span>Offline Library</span>
+                  <span>Offline Mode</span>
                 </div>
                 {downloadedCount > 0 && (
                   <span className="px-2 py-0.5 text-xs rounded-full bg-indigo-600 text-white font-semibold">
