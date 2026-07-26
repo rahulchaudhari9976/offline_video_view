@@ -52,12 +52,15 @@ app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 app.include_router(health.router)
 app.include_router(videos.router)
 
-# Auto-seed database if empty
+# Auto-seed database if empty or outdated
 db = SessionLocal()
 try:
-    if db.query(Video).count() == 0:
-        print("Database empty. Seeding initial video dataset...")
-        seed_database(force_redownload=True)
+    existing_count = db.query(Video).count()
+    first_video = db.query(Video).first()
+    # Re-seed if DB is empty or contains old sample metadata
+    if existing_count == 0 or (first_video and (first_video.size == "1.1 MB" or "flower" in first_video.filename)):
+        print("Database requires update. Seeding initial video dataset...")
+        seed_database(force_redownload=False)
 finally:
     db.close()
 
