@@ -71,7 +71,7 @@ def seed_database(force_redownload=True):
         db.commit()
         
         # Ensure tech MP4 videos exist
-        from app.getech_videos import generate_all_videos
+        from app.generate_tech_videos import generate_all_videos
         need_gen = False
         for item in sample_videos:
             video_path = os.path.join(videos_dir, item["filename"])
