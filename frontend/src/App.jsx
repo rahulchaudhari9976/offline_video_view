@@ -352,7 +352,7 @@ export default function App() {
       )}
 
       <footer className="border-t border-slate-200/80 dark:border-slate-800/80 py-5 text-center text-[11px] sm:text-xs text-slate-500">
-        Offline Learning Hub &copy; 2026 &bull; React 19 + Tailwind CSS + IndexedDB Storage
+        Offline Learning Hub &copy; 2026 &bull;
       </footer>
     </div>
   );
