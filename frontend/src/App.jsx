@@ -9,9 +9,9 @@ import { getVideos, getVideoDownloadUrl, formatAssetUrl } from './services/api';
 import { Search, VideoOff, DownloadCloud, AlertCircle, CheckCircle, RefreshCw } from 'lucide-react';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('home');
-  const [isDark, setIsDark] = useState(true);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [activeTab, setActiveTab] = useState(() => (!navigator.onLine ? 'offline' : 'home'));
+  const [isDark, setIsDark] = useState(true);
   const [videos, setVideos] = useState([]);
   const [offlineVideos, setOfflineVideos] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -38,7 +38,8 @@ export default function App() {
     };
     const handleOffline = () => {
       setIsOnline(false);
-      showToast('You are offline. Offline Library is ready!', 'error');
+      setActiveTab('offline');
+      showToast('You are offline. Showing Offline Library!', 'error');
     };
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
@@ -63,6 +64,11 @@ export default function App() {
   };
 
   const fetchVideos = async () => {
+    if (!navigator.onLine) {
+      setLoading(false);
+      setFetchError(true);
+      return;
+    }
     setLoading(true);
     setFetchError(false);
     try {
@@ -81,8 +87,14 @@ export default function App() {
 
   useEffect(() => {
     loadOfflineVideos();
-    fetchVideos();
+    if (navigator.onLine) {
+      fetchVideos();
+    } else {
+      setLoading(false);
+      setActiveTab('offline');
+    }
   }, [searchQuery]);
+
 
   const handleDownload = async (video) => {
     if (downloadingIds[video.id]) return;
