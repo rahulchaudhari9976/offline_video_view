@@ -109,6 +109,19 @@ export default function App() {
 
       const blob = response.data;
       const thumbUrl = formatAssetUrl(video.thumbnail);
+      let thumbnailDataUrl = null;
+      try {
+        if (thumbUrl) {
+          const thumbRes = await axios.get(thumbUrl, { responseType: 'blob' });
+          thumbnailDataUrl = await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result);
+            reader.readAsDataURL(thumbRes.data);
+          });
+        }
+      } catch (e) {
+        console.warn("Could not cache thumbnail data URL for offline use:", e);
+      }
       
       const offlineRecord = {
         id: video.id,
@@ -116,6 +129,7 @@ export default function App() {
         description: video.description,
         duration: video.duration,
         thumbnail: thumbUrl,
+        thumbnailDataUrl: thumbnailDataUrl,
         blob: blob,
         downloadDate: new Date().toISOString(),
         size: video.size

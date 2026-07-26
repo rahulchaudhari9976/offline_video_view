@@ -1,17 +1,21 @@
 import React from 'react';
 import { Play, Trash2, WifiOff } from 'lucide-react';
 
+const DEFAULT_SVG_THUMB = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360"><rect width="640" height="360" fill="%231e1b4b"/><circle cx="320" cy="180" r="40" fill="%234f46e5"/><polygon points="312,165 335,180 312,195" fill="%23ffffff"/><text x="50%" y="78%" dominant-baseline="middle" text-anchor="middle" fill="%2394a3b8" font-family="sans-serif" font-size="18" font-weight="bold">Offline Video</text></svg>`;
+
 export default function OfflineVideoCard({ video, onPlay, onDelete }) {
+  const thumbSrc = video.thumbnailDataUrl || video.thumbnail || DEFAULT_SVG_THUMB;
+
   return (
     <div className="group bg-white dark:bg-slate-900 rounded-2xl overflow-hidden border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
       <div>
         <div className="relative aspect-video bg-slate-950 overflow-hidden cursor-pointer" onClick={() => onPlay(video)}>
           <img 
-            src={video.thumbnail} 
+            src={thumbSrc} 
             alt={video.title} 
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             onError={(e) => {
-              e.target.src = 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=640&q=80';
+              e.target.src = DEFAULT_SVG_THUMB;
             }}
           />
           <div className="absolute bottom-3 right-3 px-2.5 py-1 rounded-md bg-slate-900/90 text-white text-xs font-semibold backdrop-blur-md">
