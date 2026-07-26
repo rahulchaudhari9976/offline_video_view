@@ -19,17 +19,26 @@ app = FastAPI(
 
 # CORS Configuration
 allowed_origins_env = os.getenv("ALLOWED_ORIGINS", "*")
-origins = [origin.strip() for origin in allowed_origins_env.split(",")] if allowed_origins_env != "*" else ["*"]
+if allowed_origins_env == "*" or not allowed_origins_env:
+    allow_origins = ["*"]
+    allow_credentials = False
+else:
+    origins = [origin.strip() for origin in allowed_origins_env.split(",") if origin.strip()]
+    default_origins = [
+        "http://localhost:5173",
+        "http://localhost:3000",
+        "http://127.0.0.1:5173",
+        "http://127.0.0.1:3000",
+        "https://offline-video-view.vercel.app",
+        "https://offline-video-api.onrender.com",
+    ]
+    allow_origins = list(set(default_origins + origins))
+    allow_credentials = True
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://localhost:3000",
-        "https://offline-video-view.vercel.app",
-        "https://offline-video-api.onrender.com",
-    ],
-    allow_credentials=True,
+    allow_origins=allow_origins,
+    allow_credentials=allow_credentials,
     allow_methods=["*"],
     allow_headers=["*"],
 )
