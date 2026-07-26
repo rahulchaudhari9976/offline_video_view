@@ -137,7 +137,7 @@ export default function App() {
       } catch (e) {
         console.warn("Could not cache thumbnail data URL for offline use:", e);
       }
-      
+
       const offlineRecord = {
         id: video.id,
         title: video.title,
@@ -173,19 +173,19 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors">
-      <Navbar 
-        activeTab={activeTab} 
-        setActiveTab={setActiveTab} 
-        isDark={isDark} 
+      <Navbar
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        isDark={isDark}
         setIsDark={setIsDark}
         isOnline={isOnline}
         downloadedCount={offlineVideos.length}
       />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-3.5 sm:px-6 lg:px-8 py-4 sm:py-8">
-        
+
         {/* Responsive Hero Header Banner */}
-        <div className="mb-6 sm:mb-8 p-5 sm:p-8 lg:p-10 rounded-2xl sm:rounded-3xl bg-gradient-to-r from-indigo-600 via-violet-600 to-purple-600 text-white shadow-xl relative overflow-hidden">
+        <div className="mb-6 sm:mb-8 p-3 sm:p-4 lg:p-5 rounded-2xl sm:rounded-3xl bg-gradient-to-r from-indigo-600 via-violet-600 to-purple-600 text-white shadow-xl relative overflow-hidden">
           <div className="absolute -right-10 -bottom-10 w-48 h-48 sm:w-64 sm:h-64 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
           <div className="relative z-10 max-w-2xl">
             <span className="px-3 py-1 rounded-full bg-white/20 text-[10px] sm:text-xs font-bold uppercase tracking-wider backdrop-blur-sm">
@@ -195,7 +195,7 @@ export default function App() {
               Watch Online or Save for Zero-Data Offline Study
             </h1>
             <p className="mt-2 sm:mt-3 text-indigo-100 text-xs sm:text-base leading-relaxed opacity-95">
-              Stream course modules online or download them directly into browser IndexedDB storage for 100% offline playback anywhere.
+              This is a basic webapp which can help student to download and view the video in offline mode without internet...
             </p>
           </div>
         </div>
@@ -207,15 +207,15 @@ export default function App() {
               {/* Search Bar */}
               <div className="relative w-full sm:w-96">
                 <Search className="w-4 h-4 sm:w-5 sm:h-5 absolute left-3.5 top-1/2 transform -translate-y-1/2 text-slate-400" />
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   placeholder="Search courses and topics..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full pl-10 sm:pl-11 pr-8 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm transition-all"
                 />
                 {searchQuery && (
-                  <button 
+                  <button
                     onClick={() => setSearchQuery('')}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xs"
                   >
@@ -247,12 +247,12 @@ export default function App() {
                 </div>
                 <h3 className="font-bold text-base sm:text-lg text-slate-900 dark:text-slate-100">{fetchError ? "Failed to connect to backend" : "No videos found"}</h3>
                 <p className="text-slate-500 text-xs sm:text-sm mt-1.5 max-w-md mx-auto leading-relaxed">
-                  {fetchError 
-                    ? "Could not fetch videos from backend server. If your backend is hosted on a free platform like Render, it may take 30-50 seconds to wake up." 
+                  {fetchError
+                    ? "Could not fetch videos from backend server. If your backend is hosted on a free platform like Render, it may take 30-50 seconds to wake up."
                     : "Try adjusting your search query to find lessons."}
                 </p>
                 {fetchError && (
-                  <button 
+                  <button
                     onClick={fetchVideos}
                     className="mt-5 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-xs sm:text-sm inline-flex items-center gap-2 shadow-md transition-all cursor-pointer"
                   >
@@ -264,9 +264,9 @@ export default function App() {
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 {videos.map(video => (
-                  <VideoCard 
-                    key={video.id} 
-                    video={video} 
+                  <VideoCard
+                    key={video.id}
+                    video={video}
                     onWatch={(v) => {
                       setActiveVideo(v);
                       setIsPlayingOffline(false);
@@ -306,7 +306,7 @@ export default function App() {
                 <p className="text-slate-500 text-xs sm:text-sm mt-2 max-w-md mx-auto leading-relaxed">
                   Go to the Online Catalog and click "Download" on any video lesson to save it for zero-data offline playback.
                 </p>
-                <button 
+                <button
                   onClick={() => setActiveTab('home')}
                   className="mt-6 px-6 py-3 rounded-xl bg-indigo-600 text-white font-semibold text-xs sm:text-sm hover:bg-indigo-700 transition-colors shadow-md cursor-pointer"
                 >
@@ -316,9 +316,9 @@ export default function App() {
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 {offlineVideos.map(video => (
-                  <OfflineVideoCard 
-                    key={video.id} 
-                    video={video} 
+                  <OfflineVideoCard
+                    key={video.id}
+                    video={video}
                     onPlay={(v) => {
                       setActiveVideo(v);
                       setIsPlayingOffline(true);
@@ -335,18 +335,17 @@ export default function App() {
 
       {/* Video Modal Player */}
       {activeVideo && (
-        <VideoPlayerModal 
-          video={activeVideo} 
-          isOffline={isPlayingOffline} 
-          onClose={() => setActiveVideo(null)} 
+        <VideoPlayerModal
+          video={activeVideo}
+          isOffline={isPlayingOffline}
+          onClose={() => setActiveVideo(null)}
         />
       )}
 
       {/* Toast Snackbar (Mobile friendly bottom positioning) */}
       {toast && (
-        <div className={`fixed bottom-4 left-4 right-4 sm:left-auto sm:right-5 sm:max-w-md z-50 flex items-center space-x-3 px-4 py-3 rounded-2xl shadow-2xl transition-all duration-300 backdrop-blur-md ${
-          toast.type === 'error' ? 'bg-rose-600/95 text-white' : 'bg-emerald-600/95 text-white'
-        }`}>
+        <div className={`fixed bottom-4 left-4 right-4 sm:left-auto sm:right-5 sm:max-w-md z-50 flex items-center space-x-3 px-4 py-3 rounded-2xl shadow-2xl transition-all duration-300 backdrop-blur-md ${toast.type === 'error' ? 'bg-rose-600/95 text-white' : 'bg-emerald-600/95 text-white'
+          }`}>
           {toast.type === 'error' ? <AlertCircle className="w-5 h-5 shrink-0" /> : <CheckCircle className="w-5 h-5 shrink-0" />}
           <span className="font-semibold text-xs sm:text-sm">{toast.message}</span>
         </div>
