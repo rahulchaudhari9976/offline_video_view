@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360">
+  <defs>
+    <linearGradient id="bg4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#451a03"/>
+      <stop offset="50%" stop-color="#78350f"/>
+      <stop offset="100%" stop-color="#9a3412"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="360" fill="url(#bg4)"/>
+  <circle cx="160" cy="165" r="130" fill="#f59e0b" opacity="0.2"/>
+  <circle cx="480" cy="175" r="110" fill="#f97316" opacity="0.15"/>
+  <g transform="translate(70, 85)">
+    <rect x="0" y="0" width="180" height="135" rx="10" fill="rgba(0,0,0,0.3)" stroke="#fbbf24" stroke-width="2"/>
+    <rect x="10" y="10" width="160" height="22" rx="4" fill="#f59e0b" opacity="0.9"/>
+    <rect x="10" y="38" width="45" height="87" rx="4" fill="#fb923c" opacity="0.8"/>
+    <rect x="62" y="38" width="50" height="40" rx="4" fill="#f43f5e" opacity="0.8"/>
+    <rect x="118" y="38" width="52" height="40" rx="4" fill="#e11d48" opacity="0.8"/>
+    <rect x="62" y="84" width="108" height="41" rx="4" fill="#f59e0b" opacity="0.7"/>
+  </g>
+  <g transform="translate(460, 150)">
+    <polygon points="-40,-50 40,-50 32,45 0,55 -32,45" fill="#f97316" stroke="#ffffff" stroke-width="2"/>
+    <text x="0" y="5" dominant-baseline="middle" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="32" font-weight="900">CSS3</text>
+  </g>
+  <rect x="35" y="32" width="160" height="28" rx="14" fill="rgba(251, 191, 36, 0.2)" stroke="#fbbf24" stroke-width="1"/>
+  <text x="115" y="49" dominant-baseline="middle" text-anchor="middle" fill="#fde68a" font-family="sans-serif" font-size="11" font-weight="800" letter-spacing="1.5">CSS GRID • UI DESIGN</text>
+  <text x="35" y="275" fill="#ffffff" font-family="sans-serif" font-size="22" font-weight="900">Mastering CSS Grid &amp; Layouts</text>
+  <text x="35" y="305" fill="#fde68a" font-family="sans-serif" font-size="13" font-weight="600">Responsive Grid • Flexbox • Glassmorphism UI</text>
+</svg>
