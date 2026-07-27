@@ -1,8 +1,11 @@
-const CACHE_NAME = 'offline-learning-hub-v3';
+const CACHE_NAME = 'offline-learning-hub-v4';
+const API_CACHE_NAME = 'offline-learning-hub-api-v4';
+
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
-  '/manifest.json'
+  '/manifest.json',
+  '/favicon.svg'
 ];
 
 // Install Event: Pre-cache core static application shell
@@ -21,7 +24,7 @@ self.addEventListener('activate', (event) => {
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cache) => {
-          if (cache !== CACHE_NAME) {
+          if (cache !== CACHE_NAME && cache !== API_CACHE_NAME) {
             return caches.delete(cache);
           }
         })
@@ -31,29 +34,67 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch Event: Cache-First with Stale-While-Revalidate for zero-latency offline loading
+// Fetch Event Handler
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
 
-  // Exclude non-GET requests and backend video API / streaming endpoints
-  if (
-    event.request.method !== 'GET' || 
-    url.pathname.includes('/videos') || 
-    url.pathname.includes('/stream') || 
-    url.pathname.includes('/download')
-  ) {
+  // Exclude non-GET requests and heavy video download/stream binaries (handled via IndexedDB)
+  if (event.request.method !== 'GET') {
     return;
   }
 
+  if (url.pathname.includes('/stream') || url.pathname.includes('/download')) {
+    return;
+  }
+
+  // Handle Backend API catalog requests (/videos) with Stale-While-Revalidate strategy
+  if (url.pathname.includes('/videos')) {
+    event.respondWith(
+      caches.open(API_CACHE_NAME).then((cache) => {
+        return fetch(event.request)
+          .then((networkResponse) => {
+            if (networkResponse && networkResponse.status === 200) {
+              cache.put(event.request, networkResponse.clone());
+            }
+            return networkResponse;
+          })
+          .catch(() => {
+            // Offline fallback: Serve cached video catalog list if network is unavailable
+            return cache.match(event.request, { ignoreSearch: true });
+          });
+      })
+    );
+    return;
+  }
+
+  // Handle HTML navigation requests
+  if (event.request.mode === 'navigate' || event.request.headers.get('accept')?.includes('text/html')) {
+    event.respondWith(
+      fetch(event.request)
+        .then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            const copy = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
+            return networkResponse;
+          }
+          return caches.match('/index.html').then((htmlMatch) => htmlMatch || caches.match('/'));
+        })
+        .catch(() => {
+          return caches.match('/index.html').then((htmlMatch) => htmlMatch || caches.match('/'));
+        })
+    );
+    return;
+  }
+
+  // Standard Static Assets (JS, CSS, SVG, Fonts, Vite dev files) Strategy: Cache-First + Dynamic Cache
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      // 1. If cached asset exists, return it immediately (Works 100% Offline)
+    caches.match(event.request, { ignoreSearch: true }).then((cachedResponse) => {
       if (cachedResponse) {
         // If online, update cache in background (Stale-While-Revalidate)
         if (navigator.onLine) {
           fetch(event.request)
             .then((networkResponse) => {
-              if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
+              if (networkResponse && networkResponse.status === 200) {
                 caches.open(CACHE_NAME).then((cache) => cache.put(event.request, networkResponse));
               }
             })
@@ -62,7 +103,7 @@ self.addEventListener('fetch', (event) => {
         return cachedResponse;
       }
 
-      // 2. If asset is not in cache yet, fetch from network and cache it
+      // If asset is not cached yet, fetch from network and dynamically store in cache
       return fetch(event.request)
         .then((networkResponse) => {
           if (networkResponse && networkResponse.status === 200 && (networkResponse.type === 'basic' || networkResponse.type === 'cors')) {
@@ -73,16 +114,13 @@ self.addEventListener('fetch', (event) => {
           }
           return networkResponse;
         })
-        .catch(() => {
-          // 3. Network failed & asset not directly matched: Fallback for page navigation (Hard refresh / reload offline)
-          if (event.request.mode === 'navigate' || event.request.headers.get('accept')?.includes('text/html')) {
-            return caches.match('/index.html').then((htmlMatch) => {
-              return htmlMatch || caches.match('/');
-            });
-          }
+        .catch((err) => {
+          console.warn('[SW] Asset fetch failed offline:', event.request.url);
+          return caches.match(event.request, { ignoreSearch: true });
         });
     })
   );
 });
+
 
 

@@ -64,16 +64,13 @@ export default function App() {
   };
 
   const fetchVideos = async () => {
-    if (!navigator.onLine) {
-      setLoading(false);
-      setFetchError(true);
-      return;
-    }
     setLoading(true);
     setFetchError(false);
     try {
       const res = await getVideos(searchQuery);
-      setVideos(res.data);
+      if (res && res.data) {
+        setVideos(res.data);
+      }
     } catch (err) {
       console.error("Error fetching online videos:", err);
       setFetchError(true);
@@ -87,16 +84,16 @@ export default function App() {
 
   useEffect(() => {
     loadOfflineVideos();
-    if (navigator.onLine) {
-      fetchVideos();
-    } else {
-      setLoading(false);
-      setActiveTab('offline');
-    }
+    fetchVideos();
   }, [searchQuery]);
 
 
   const handleDownload = async (video) => {
+    if (!navigator.onLine) {
+      showToast("Internet connection required to download videos.", "error");
+      return;
+    }
+
     if (downloadingIds[video.id]) return;
 
     const existing = offlineVideos.find(v => v.id === video.id);
@@ -245,19 +242,23 @@ export default function App() {
                 <div className="w-14 h-14 sm:w-16 sm:h-16 mx-auto rounded-full bg-indigo-50 dark:bg-indigo-950/80 flex items-center justify-center text-indigo-600 dark:text-indigo-400 mb-4">
                   <VideoOff className="w-7 h-7 sm:w-8 sm:h-8" />
                 </div>
-                <h3 className="font-bold text-base sm:text-lg text-slate-900 dark:text-slate-100">{fetchError ? "Failed to connect to backend" : "No videos found"}</h3>
+                <h3 className="font-bold text-base sm:text-lg text-slate-900 dark:text-slate-100">
+                  {!isOnline ? "You are currently offline" : fetchError ? "Failed to connect to backend" : "No videos found"}
+                </h3>
                 <p className="text-slate-500 text-xs sm:text-sm mt-1.5 max-w-md mx-auto leading-relaxed">
-                  {fetchError
-                    ? "Could not fetch videos from backend server. If your backend is hosted on a free platform like Render, it may take 30-50 seconds to wake up."
-                    : "Try adjusting your search query to find lessons."}
+                  {!isOnline
+                    ? "Connect to the internet to browse and download new lessons, or switch to your Offline Library tab to watch saved videos."
+                    : fetchError
+                      ? "Could not fetch videos from backend server. If your backend is hosted on a free platform like Render, it may take 30-50 seconds to wake up."
+                      : "Try adjusting your search query to find lessons."}
                 </p>
-                {fetchError && (
+                {(!isOnline || fetchError) && (
                   <button
                     onClick={fetchVideos}
                     className="mt-5 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-xs sm:text-sm inline-flex items-center gap-2 shadow-md transition-all cursor-pointer"
                   >
                     <RefreshCw className="w-4 h-4" />
-                    Retry Connection
+                    {!isOnline ? "Retry Network Connection" : "Retry Connection"}
                   </button>
                 )}
               </div>
