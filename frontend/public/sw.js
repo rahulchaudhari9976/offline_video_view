@@ -38,12 +38,17 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
 
-  // Exclude non-GET requests and heavy video download/stream binaries (handled via IndexedDB)
+  // Exclude non-GET requests and heavy video download/stream binaries (handled via browser native range requests & IndexedDB)
   if (event.request.method !== 'GET') {
     return;
   }
 
-  if (url.pathname.includes('/stream') || url.pathname.includes('/download')) {
+  if (
+    url.pathname.includes('/stream') || 
+    url.pathname.includes('/download') || 
+    url.pathname.includes('/uploads/videos/') ||
+    url.pathname.includes('/uploads/')
+  ) {
     return;
   }
 
