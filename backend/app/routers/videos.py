@@ -14,9 +14,10 @@ router = APIRouter(prefix="/videos", tags=["Videos"])
 def list_videos(search: Optional[str] = None, db: Session = Depends(get_db)):
     """List all available videos with optional search query filter."""
     query = db.query(Video)
-    if search:
+    if search and search.strip():
+        clean_search = search.strip()
         query = query.filter(
-            Video.title.ilike(f"%{search}%") | Video.description.ilike(f"%{search}%")
+            Video.title.ilike(f"%{clean_search}%") | Video.description.ilike(f"%{clean_search}%")
         )
     return query.order_by(Video.id.desc()).all()
 
@@ -30,8 +31,16 @@ def get_video_details(video_id: int, db: Session = Depends(get_db)):
     return video
 
 
+MAX_CHUNK_SIZE = 2 * 1024 * 1024  # 2MB max chunk size per partial content response
+
+
 @router.get("/{video_id}/stream")
-def stream_video(video_id: int, range: Optional[str] = Header(None), db: Session = Depends(get_db)):
+def stream_video(
+    video_id: int,
+    range_header: Optional[str] = Header(None, alias="Range"),
+    range: Optional[str] = Header(None),
+    db: Session = Depends(get_db)
+):
     """Stream video with HTTP 206 Partial Content range requests for instant seek/buffering."""
     video = db.query(Video).filter(Video.id == video_id).first()
     if not video:
@@ -42,20 +51,26 @@ def stream_video(video_id: int, range: Optional[str] = Header(None), db: Session
         raise HTTPException(status_code=404, detail="Video file missing on server")
 
     file_size = os.path.getsize(file_path)
+    req_range = range_header or range
 
-    if range:
-        range_header = range.strip()
-        unit, _, ranges = range_header.partition("=")
+    if req_range:
+        req_range = req_range.strip()
+        unit, _, ranges = req_range.partition("=")
         if unit != "bytes":
             raise HTTPException(status_code=416, detail="Invalid Range Unit")
 
         range_start, _, range_end = ranges.partition("-")
         start = int(range_start) if range_start else 0
-        end = int(range_end) if range_end else file_size - 1
 
-        if start >= file_size or end >= file_size or start > end:
+        if range_end:
+            end = int(range_end)
+        else:
+            end = min(start + MAX_CHUNK_SIZE - 1, file_size - 1)
+
+        if start >= file_size or start > end:
             raise HTTPException(status_code=416, detail="Requested Range Not Satisfiable")
 
+        end = min(end, file_size - 1)
         chunk_size = (end - start) + 1
 
         def video_stream():
@@ -63,7 +78,7 @@ def stream_video(video_id: int, range: Optional[str] = Header(None), db: Session
                 f.seek(start)
                 bytes_left = chunk_size
                 while bytes_left > 0:
-                    read_bytes = min(1024 * 1024, bytes_left)
+                    read_bytes = min(64 * 1024, bytes_left)
                     data = f.read(read_bytes)
                     if not data:
                         break
@@ -75,10 +90,18 @@ def stream_video(video_id: int, range: Optional[str] = Header(None), db: Session
             "Accept-Ranges": "bytes",
             "Content-Length": str(chunk_size),
             "Content-Type": "video/mp4",
+            "Cache-Control": "public, max-age=3600",
         }
         return StreamingResponse(video_stream(), status_code=206, headers=headers)
 
-    return FileResponse(file_path, media_type="video/mp4")
+    return FileResponse(
+        file_path,
+        media_type="video/mp4",
+        headers={
+            "Accept-Ranges": "bytes",
+            "Cache-Control": "public, max-age=3600",
+        }
+    )
 
 
 @router.get("/{video_id}/download")
