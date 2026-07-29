@@ -65,6 +65,8 @@ export default function VideoPlayerModal({ video, isOffline, onClose }) {
               controls 
               autoPlay 
               playsInline
+              preload="metadata"
+              crossOrigin="anonymous"
               className="w-full h-full object-contain focus:outline-none"
             />
           ) : (

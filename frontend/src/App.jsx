@@ -63,11 +63,11 @@ export default function App() {
     }
   };
 
-  const fetchVideos = async () => {
+  const fetchVideos = async (query = searchQuery) => {
     setLoading(true);
     setFetchError(false);
     try {
-      const res = await getVideos(searchQuery);
+      const res = await getVideos(query);
       if (res && res.data) {
         setVideos(res.data);
       }
@@ -84,7 +84,13 @@ export default function App() {
 
   useEffect(() => {
     loadOfflineVideos();
-    fetchVideos();
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchVideos(searchQuery);
+    }, 300);
+    return () => clearTimeout(timer);
   }, [searchQuery]);
 
 
